@@ -49,6 +49,7 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
         String fileName = (String) argsMap.get("fileName");
         String title = (String) argsMap.get("title");
+        String textToSend = (String) argsMap.get("text");
 
         Context activeContext = _registrar.activeContext();
 
@@ -58,7 +59,10 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-        activeContext.startActivity(Intent.createChooser(shareIntent, title));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+         activeContext.startActivity(Intent.createChooser(shareIntent, title));
     }
 
     private void shareText(Object arguments) {
